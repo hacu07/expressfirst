@@ -1,12 +1,21 @@
 const mongoose = require('mongoose')
-
+const {companySchema} =  require('./company') // obtiene solo el companySchema
 //Creacion del schema coche
 const carSchema = new mongoose.Schema({
     //parametros de validacion de schema
+
+    // PARA USAR DE MANERA EMBEBIDA
+    company:{
+        type: companySchema,
+        required: true
+    },
+    
+    /* 
+    PARA USAR DE MANERA NORMALIZADA
     company:{
         type: mongoose.Schema.Types.ObjectId, // objeto id del documento 'company'
         ref: 'company' // referencia a la coleccion del id (debe ser igual a como se llamo en el modelo)
-    },
+    },*/
     model: String,
     sold: Boolean,
     price:{

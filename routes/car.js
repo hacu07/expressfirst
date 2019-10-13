@@ -1,5 +1,6 @@
 const express = require('express')
 const Car = require('../models/car')
+const {Company} = require('../models/company')
 // toma la ruta donde se encuentra alojado el archivo y 
 // todos los paths que apunten a este se ejecutan aca
 const router = express.Router()
@@ -13,7 +14,8 @@ router.get('/',async (req,res)=>{
     // 'cars' = almacena los documentos coches obtenidos de la BD
     const cars = await Car
                 .find()
-                .populate('company', 'name country') // obtiene los datos de la coleccion "companies" segun el id enviado
+                // usado para modelo de datos normalizados
+                //.populate('company', 'name country') // obtiene los datos de la coleccion "companies" segun el id enviado
     res.send(cars)
 
 });
@@ -40,7 +42,45 @@ router.get('/:id', async (req,res)=>{
     Validacion de datos enviados por parametros
     con  "express-validator"
 */
+
+//      POST MODELO DE DATOS EMBEBIDO
 router.post('/', [   
+    // validacion de datos con "express-validator"
+    check('model').isLength({min:2})    // mayor a 2 caracteres
+], async (req, res)=>{
+    // Valida si ocurrio alun error en la validacion
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){ // encontro errores
+        return res.status(422).json(
+                { errors: errors.array()}
+            );
+    }
+
+    //  Busca si existe la compañia
+    const company = await Company.findById(req.body.companyId)
+    //  No existe
+    if(!company)  return res.status(400).send('No tenemos ese fabricante')  // No permite guardar el coche
+
+    //  si continua, no encontro error
+    //  guarda coche en BD
+
+    // crea objeto con datos tomados de los parametros enviados por el cliente
+    const car = new Car({
+        company: company,
+        model: req.body.model,
+        year: req.body.year,
+        sold: req.body.sold,
+        price: req.body.price,
+        extras: req.body.extras
+    })
+    // guarda en bd
+    const result = await car.save()
+
+    res.status(201).send(result)
+})
+
+//      POST DE MODELO DE DATOS NORMALIZADOS
+/*router.post('/', [   
     // validacion de datos con "express-validator"
     check('model').isLength({min:2})    // mayor a 2 caracteres
 ], async (req, res)=>{
@@ -68,7 +108,7 @@ router.post('/', [
     const result = await car.save()
 
     res.status(201).send(result)
-})
+})*/
 
 /*
                 METHOD: PUT

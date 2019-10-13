@@ -17,4 +17,5 @@ const companySchema =  new mongoose.Schema({
 
 const Company = mongoose.model('company', companySchema)
 
-module.exports = Company
+module.exports.Company = Company        // exporta clase modelo 
+module.exports.companySchema = companySchema    // exporta schema para usar en modelo de datos embebidos

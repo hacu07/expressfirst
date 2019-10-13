@@ -1,5 +1,5 @@
 const express = require('express')
-const Company = require('../models/company')
+const {Company} = require('../models/company')
 // toma la ruta donde se encuentra alojado el archivo y 
 // todos los paths que apunten a este se ejecutan aca
 const router = express.Router()
