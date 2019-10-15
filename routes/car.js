@@ -1,3 +1,6 @@
+const Role = require('../helpers/role')
+const autorize = require('../middleware/role')
+const auth = require('../middleware/auth')
 const express = require('express')
 const Car = require('../models/car')
 const {Company} = require('../models/company')
@@ -10,7 +13,7 @@ const { check, validationResult } = require('express-validator');
 // Se creo modelo en models/car.js
 
 // retorna todos los documentos obtenidos de la coleccion cars 
-router.get('/',async (req,res)=>{
+router.get('/', [auth, autorize([Role.Admin, Role.Editor])], async (req,res)=>{
     // 'cars' = almacena los documentos coches obtenidos de la BD
     const cars = await Car
                 .find()

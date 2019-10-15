@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt')
 const express = require('express')
 const User = require('../models/user')
 // toma la ruta donde se encuentra alojado el archivo y 
@@ -15,7 +16,6 @@ router.get('/',async (req,res)=>{
     res.send(users)
 
 });
-
 
 // retorna documento segun id enviado por parametro
 router.get('/:id', async (req,res)=>{
@@ -41,7 +41,8 @@ router.get('/:id', async (req,res)=>{
 router.post('/', [   
     // validacion de datos con "express-validator"
     check('name').isLength({min:3}),        // valida si es un correo
-    check('email').isEmail()                // Si es un correo
+    check('email').isEmail(),                // Si es un correo
+    check('password').isLength({min: 3})
 ], async (req, res)=>{
     // Valida si ocurrio alun error en la validacion
     const errors = validationResult(req);
@@ -54,16 +55,35 @@ router.post('/', [
     //  si continua, no encontro error
     // guarda USUARIO en BD
 
+    // valida que el email no se encuentre registrado
+    let user = await User.findOne({email: req.body.email})
+    // usuario existe, retorna error
+    if(user) return res.status(400).send('El usuario ya se encuentra registrado.')
+
+    // hash al password 
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(req.body.password, salt)
+
     // crea objeto con datos tomados de los parametros enviados por el cliente
-    const user = new User({
+    user = new User({
         name: req.body.name,
         email: req.body.email,
+        password: hashPassword,
         isCustomer: req.body.isCustomer
     })
     // guarda en bd
     const result = await user.save()
 
-    res.status(201).send(result)
+    // genera JWT
+    const jwtToken = user.generateJWT()
+
+    res.status(201)
+    .header('Authorization',jwtToken)   // envia token en el header en modo clave: valor
+    .send({                             // retorna respuesta con parametros en body
+        _id: user._id,
+        name: user.name,
+        email: user.email
+    })
 })
 
 /*

@@ -1,3 +1,5 @@
+const auth = require('../middleware/auth')
+const admin = require('../middleware/admin')
 const express = require('express')
 const Sale = require('../models/sale')
 const User = require('../models/user')
@@ -7,13 +9,17 @@ const mongoose =  require('mongoose')
 // todos los paths que apunten a este se ejecutan aca
 const router = express.Router()
 
-router.get('/', async(req,res)=>{
+
+// array de middleware para ejecutar en orden
+router.get('/', [auth,admin] , async(req,res)=>{
     // obtiene todas las ventas
     const sales = await Sale.find()
     res.send(sales)
 })
 
-router.post("/", async(req,res)=>{
+// proceso de venta
+// valida con el middleware 'auth' que el usuario tiene token autorizado
+router.post("/", auth, async(req,res)=>{
     // anter de registrar la venta valida si existe el usuario y el coche
 
     // valida existencia de usuario
