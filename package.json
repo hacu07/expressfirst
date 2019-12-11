@@ -17,7 +17,7 @@
     "mongodb": "^3.3.5",
     "mongodb-topology": "0.0.23",
     "mongodb-topology-manager": "^2.1.0",
-    "mongoose": "^5.7.3",
+    "mongoose": "^5.7.5",
     "morgan": "^1.9.1"
   }
 }
