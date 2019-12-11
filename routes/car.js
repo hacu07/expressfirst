@@ -10,6 +10,7 @@ const router = express.Router()
 const { check, validationResult } = require('express-validator');
 
 
+
 // Se creo modelo en models/car.js
 
 // retorna todos los documentos obtenidos de la coleccion cars 

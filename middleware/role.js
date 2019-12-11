@@ -1,6 +1,7 @@
 function authorize(roles = []){
+    // Si el parametro que se envio es un string y no un arreglo
     if(typeof roles === 'string'){
-        roles = [roles]
+        roles = [roles] // lo convierte en arreglo
     }
 
     return[

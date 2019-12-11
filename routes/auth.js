@@ -6,10 +6,10 @@ const User = require('../models/user')
 // toma la ruta donde se encuentra alojado el archivo y 
 // todos los paths que apunten a este se ejecutan aca
 const router = express.Router()
+// Validador de parametros enviados Ej: valida si es un correo, min cantidad de caracteres, etc.
 const { check, validationResult } = require('express-validator');
 
 // LOGIN
-
 router.post('/', [   
     // validacion de datos con "express-validator"
     check('email').isEmail(),                // Si es un correo

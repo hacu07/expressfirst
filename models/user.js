@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema({
 // Se crea una variable de entorno para almacenar la 'semilla'
 /*
     1. abrir consola y escribir comando: export 'NOMBRE_VARIABLE_ENTORNO'='VALOR_VARIABLE'
-      ej: export SECRET_KEY_JWT_CAR_API = 1234
+      ej: export SECRET_KEY_JWT_CAR_API=1234 (sin espacios al dar =, en consola tipo bash)
         si es windows cmd cambiar export por set
 */
 
@@ -46,7 +46,9 @@ userSchema.methods.generateJWT = function(){
     process.env.SECRET_KEY_JWT_CAR_API)
 }
 
-//Crea moedlo
+//Crea modelo
 const User = mongoose.model('user', userSchema)
+
+User.watch().on('change', data => console.log(new Date(), data));
 
 module.exports = User

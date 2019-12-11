@@ -1,4 +1,4 @@
-// Valia que el token obtenido del cliente es correcto
+// Valida que el token obtenido del cliente es correcto
 const jwt = require('jsonwebtoken')
 
 function auth(req,res,next){
@@ -12,7 +12,7 @@ function auth(req,res,next){
         const payload = jwt.verify(jwtToken, process.env.SECRET_KEY_JWT_CAR_API)
 
         req.user = payload
-        next() // lama al siguiente middleaware
+        next() // llama al siguiente middleaware
     }catch(e){
         res.status(400).send('Acceso denegado. Token no valido.')
     }
