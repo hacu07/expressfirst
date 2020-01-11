@@ -45,7 +45,7 @@ async function run() {
     await replSet.start();
     console.log(new Date(), 'Replica set started...');
 
-    const uri = 'mongodb://'+bind_ip+':'+ port +'/carsdb    ';
+    const uri = 'mongodb://'+bind_ip+':'+ port +'/carsdb';
     mongoose.connect(uri,{useNewUrlParser:true, useFindAndModify:false, useCreateIndex: true})
     .then( ()=>{
             console.log('Conectado a MongoDB')            

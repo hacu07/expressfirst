@@ -49,6 +49,8 @@ userSchema.methods.generateJWT = function(){
 //Crea modelo
 const User = mongoose.model('user', userSchema)
 
-User.watch().on('change', data => console.log(new Date(), data));
+User.watch().on('change', data => 
+    console.log(new Date(), data)
+);
 
 module.exports = User
