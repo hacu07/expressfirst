@@ -12,7 +12,7 @@
     "bcrypt": "^3.0.6",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "manager": "^1.0.9",
     "mongodb": "^3.3.5",
     "mongodb-topology": "0.0.23",
